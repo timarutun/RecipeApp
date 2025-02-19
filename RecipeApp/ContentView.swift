@@ -8,14 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var recipes: [Recipe] = []
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            List(recipes) { recipe in
+                HStack {
+                    AsyncImage(url: recipe.photoURL) { image in
+                        image.resizable().scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 50, height: 50)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    
+                    VStack(alignment: .leading) {
+                        Text(recipe.name)
+                            .font(.headline)
+                        Text(recipe.cuisine)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .navigationTitle("Recipes")
+            .task {
+                await loadRecipes()
+            }
         }
-        .padding()
+    }
+    
+    func loadRecipes() async {
+        do {
+            let fetchedRecipes = try await RecipeAPIClient().fetchRecipes()
+            recipes = fetchedRecipes
+        } catch {
+            print("Failed to load recipes: \(error.localizedDescription)")
+        }
     }
 }
 
