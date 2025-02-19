@@ -13,22 +13,27 @@ struct CachedAsyncImage: View {
     var body: some View {
         if let url = url {
             if let cachedImage = ImageCache.shared.cachedImage(for: url) {
+                // If the image is cached, display it
                 Image(uiImage: cachedImage)
                     .resizable()
                     .scaledToFill()
             } else {
+                // If the image is not cached, download it
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
                     case .success(let image):
-                        image.resizable().scaledToFill()
-                        .onAppear {
-                            if let uiImage = image.asUIImage() {
-                                ImageCache.shared.cacheImage(uiImage, for: url)
+                        // Cache the downloaded image
+                        image.resizable()
+                            .scaledToFill()
+                            .onAppear {
+                                if let uiImage = image.asUIImage() {
+                                    ImageCache.shared.cacheImage(uiImage, for: url)
+                                }
                             }
-                        }
                     case .failure:
+                        // Display a placeholder if the download fails
                         Image(systemName: "photo")
                             .resizable()
                             .scaledToFill()
@@ -38,6 +43,7 @@ struct CachedAsyncImage: View {
                 }
             }
         } else {
+            // Display a placeholder if the URL is invalid
             Image(systemName: "photo")
                 .resizable()
                 .scaledToFill()
@@ -45,6 +51,7 @@ struct CachedAsyncImage: View {
     }
 }
 
+// Convert SwiftUI Image to UIImage
 extension Image {
     func asUIImage() -> UIImage? {
         let controller = UIHostingController(rootView: self)

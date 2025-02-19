@@ -14,11 +14,13 @@ class ImageCache {
     private let cacheDirectory: URL
     
     private init() {
+        // Create a dedicated directory for cached images
         let paths = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
         cacheDirectory = paths[0].appendingPathComponent("ImageCache")
         createCacheDirectory()
     }
     
+    // Create the cache directory if it doesn't exist
     private func createCacheDirectory() {
         if !fileManager.fileExists(atPath: cacheDirectory.path) {
             do {
@@ -29,6 +31,7 @@ class ImageCache {
         }
     }
     
+    // Save image to the cache
     func cacheImage(_ image: UIImage, for url: URL) {
         let filePath = cacheDirectory.appendingPathComponent(url.lastPathComponent)
         if let data = image.pngData() {
@@ -40,11 +43,22 @@ class ImageCache {
         }
     }
     
+    // Retrieve image from the cache
     func cachedImage(for url: URL) -> UIImage? {
         let filePath = cacheDirectory.appendingPathComponent(url.lastPathComponent)
         if fileManager.fileExists(atPath: filePath.path) {
             return UIImage(contentsOfFile: filePath.path)
         }
         return nil
+    }
+    
+    // Clear the cache for testing
+    func clearCache() {
+        do {
+            try fileManager.removeItem(at: cacheDirectory)
+            createCacheDirectory()
+        } catch {
+            print("Failed to clear cache: \(error.localizedDescription)")
+        }
     }
 }

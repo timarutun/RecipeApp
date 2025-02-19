@@ -17,15 +17,26 @@ final class RecipeAPIClientTests: XCTestCase {
         do {
             let recipes = try await apiClient.fetchRecipes()
             
-            XCTAssertFalse(recipes.isEmpty, "Recipes array is empty")
+            XCTAssertFalse(recipes.isEmpty, "Recipes array should not be empty")
             
             if let firstRecipe = recipes.first {
-                XCTAssertNotNil(firstRecipe.id, "Recipe id is nill")
-                XCTAssertFalse(firstRecipe.name.isEmpty, "Recipe name is empty")
+                XCTAssertNotNil(firstRecipe.id, "Recipe id should not be nill")
+                XCTAssertFalse(firstRecipe.name.isEmpty, "Recipe name should not be empty")
             }
         } catch {
             XCTFail("Error fetching recepies. Error: \(error)")
         }
+    }
+    
+    func testImageCaching() {
+            let cache = ImageCache.shared
+            let testImage = UIImage(systemName: "photo")!
+            let testURL = URL(string: "https://example.com/testImage.png")!
+            
+            cache.cacheImage(testImage, for: testURL)
+            let cachedImage = cache.cachedImage(for: testURL)
+            
+            XCTAssertNotNil(cachedImage, "Image should be cached")
     }
 
 }
