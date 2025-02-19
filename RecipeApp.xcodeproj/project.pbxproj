@@ -16,6 +16,7 @@
 		3963AE1F2D655C2B008B9204 /* RecipeAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3963AE1E2D655C2B008B9204 /* RecipeAppUITestsLaunchTests.swift */; };
 		3963AE2C2D655CC4008B9204 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3963AE2B2D655CC4008B9204 /* Recipe.swift */; };
 		3963AE2E2D655E93008B9204 /* RecipeAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3963AE2D2D655E93008B9204 /* RecipeAPIClient.swift */; };
+		3963AE302D65BAD7008B9204 /* RecipeAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3963AE2F2D65BAD7008B9204 /* RecipeAPIClientTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		3963AE1E2D655C2B008B9204 /* RecipeAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3963AE2B2D655CC4008B9204 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		3963AE2D2D655E93008B9204 /* RecipeAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAPIClient.swift; sourceTree = "<group>"; };
+		3963AE2F2D65BAD7008B9204 /* RecipeAPIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAPIClientTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			children = (
 				3963AE012D655C28008B9204 /* RecipeAppApp.swift */,
 				3963AE032D655C28008B9204 /* ContentView.swift */,
+				3963AE2F2D65BAD7008B9204 /* RecipeAPIClientTests.swift */,
 				3963AE2B2D655CC4008B9204 /* Recipe.swift */,
 				3963AE2D2D655E93008B9204 /* RecipeAPIClient.swift */,
 				3963AE052D655C2A008B9204 /* Assets.xcassets */,
@@ -275,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3963AE132D655C2B008B9204 /* RecipeAppTests.swift in Sources */,
+				3963AE302D65BAD7008B9204 /* RecipeAPIClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
