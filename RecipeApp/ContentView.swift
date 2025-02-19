@@ -14,10 +14,19 @@ struct ContentView: View {
         NavigationView {
             List(recipes) { recipe in
                 HStack {
-                    AsyncImage(url: recipe.photoURL) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        ProgressView()
+                    AsyncImage(url: recipe.photoURL) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image.resizable().scaledToFill()
+                        case .failure:
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFill()
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
                     .frame(width: 50, height: 50)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
