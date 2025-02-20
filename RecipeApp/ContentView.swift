@@ -13,17 +13,20 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List(recipes) { recipe in
-                HStack {
-                    CachedAsyncImage(url: recipe.photoURL)
-                        .frame(width: 50, height: 50)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
-                    VStack(alignment: .leading) {
-                        Text(recipe.name)
-                            .font(.headline)
-                        Text(recipe.cuisine)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                    HStack(alignment: .top) {
+                        CachedAsyncImage(url: recipe.photoURLSmall)
+                            .frame(width: 90, height: 90)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(recipe.name)
+                                .font(.headline)
+                            Text(recipe.cuisine)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.horizontal, 5)
                     }
                 }
             }
