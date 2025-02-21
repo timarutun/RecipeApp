@@ -10,43 +10,80 @@ import SwiftUI
 struct ContentView: View {
     @State private var recipes: [Recipe] = []
     @State private var searchText: String = ""
+    @State private var selectedCuisine: String? = nil
 
+    var cuisineTypes: [String] {
+        let cuisines = Set(recipes.map { $0.cuisine })
+        return ["All"] + cuisines.sorted()
+    }
+    
     var filteredRecipes: [Recipe] {
-        if searchText.isEmpty {
-            return recipes
-        } else {
-            return recipes.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        recipes.filter { recipe in
+            let matchesSearch = searchText.isEmpty || recipe.name.localizedCaseInsensitiveContains(searchText)
+            let matchesCuisine = selectedCuisine == nil || selectedCuisine == "All" || recipe.cuisine == selectedCuisine
+            return matchesSearch && matchesCuisine
         }
     }
 
     var body: some View {
         NavigationView {
-            List(filteredRecipes) { recipe in
-                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                    HStack(alignment: .top) {
-                        CachedAsyncImage(url: recipe.photoURLSmall)
-                            .frame(width: 90, height: 90)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(recipe.name)
-                                .font(.headline)
-                            Text(recipe.cuisine)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+            VStack {
+                HStack {
+                    // Filter button
+                    Menu {
+                        ForEach(cuisineTypes, id: \.self) { cuisine in
+                            Button(action: { selectedCuisine = (cuisine == "All" ? nil : cuisine) }) {
+                                Text(cuisine)
+                                if selectedCuisine == cuisine || (selectedCuisine == nil && cuisine == "All") {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
                         }
-                        .padding(.horizontal, 5)
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
+                            .font(.title2)
+                            .foregroundStyle(.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
+
+                    // Search bar
+                    TextField("Search recipes", text: $searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                .padding(.horizontal)
+
+                // Recipes list
+                List(filteredRecipes) { recipe in
+                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                        HStack(alignment: .top) {
+                            CachedAsyncImage(url: recipe.photoURLSmall)
+                                .frame(width: 90, height: 90)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(recipe.name)
+                                    .font(.headline)
+                                Text(recipe.cuisine)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.horizontal, 5)
+                        }
+                    }
+                    
+                }
+                .task {
+                    await loadRecipes()
+                }
+                .refreshable {
+                    await loadRecipes()
                 }
             }
             .navigationTitle("Recipes")
-            .searchable(text: $searchText, prompt: "Search recipes")
-            .task {
-                await loadRecipes()
-            }
-            .refreshable {
-                await loadRecipes()
-            }
+            
+//            .onTapGesture {
+//                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//            }
         }
     }
     
