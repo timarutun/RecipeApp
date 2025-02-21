@@ -9,10 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var recipes: [Recipe] = []
+    @State private var searchText: String = ""
+
+    var filteredRecipes: [Recipe] {
+        if searchText.isEmpty {
+            return recipes
+        } else {
+            return recipes.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
 
     var body: some View {
         NavigationView {
-            List(recipes) { recipe in
+            List(filteredRecipes) { recipe in
                 NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
                     HStack(alignment: .top) {
                         CachedAsyncImage(url: recipe.photoURLSmall)
@@ -31,6 +40,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Recipes")
+            .searchable(text: $searchText, prompt: "Search recipes")
             .task {
                 await loadRecipes()
             }
