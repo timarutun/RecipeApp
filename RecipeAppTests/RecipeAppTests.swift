@@ -46,14 +46,14 @@ final class RecipeAppTests: XCTestCase {
     //MARK: Test malformed data:
     
     func testFetchRecipesMalformedData() async {
-        var apiClient = RecipeAPIClient()
-        apiClient.recipesURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json")!
-        
+        let malformedURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json")!
+        let apiClient = RecipeAPIClient(recipesURL: malformedURL)
+            
         do {
             let recipes = try await apiClient.fetchRecipes()
             XCTFail("Expected to throw an error for malformed data, but succeeded with \(recipes.count) recipes.")
         } catch {
-            XCTAssertTrue(error is DecodingError, "Expected DecodingError for malformed data.")
+            XCTAssertTrue(error is RecipeError, "Expected RecipeError for malformed data.")
         }
     }
     
