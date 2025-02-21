@@ -34,6 +34,9 @@ struct ContentView: View {
             .task {
                 await loadRecipes()
             }
+            .refreshable {
+                await loadRecipes()
+            }
         }
     }
     
