@@ -9,7 +9,7 @@ import Foundation
 
 struct RecipeAPIClient {
     
-    private let recipesURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json")!
+    var recipesURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json")!
     
     //MARK: Fetching Recipes
     func fetchRecipes() async throws -> [Recipe] {

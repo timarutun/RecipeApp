@@ -42,5 +42,37 @@ final class RecipeAppTests: XCTestCase {
             
             XCTAssertNotNil(cachedImage, "Image should be cached")
     }
+    
+    //MARK: Test malformed data:
+    
+    func testFetchRecipesMalformedData() async {
+        var apiClient = RecipeAPIClient()
+        apiClient.recipesURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json")!
+        
+        do {
+            let recipes = try await apiClient.fetchRecipes()
+            XCTFail("Expected to throw an error for malformed data, but succeeded with \(recipes.count) recipes.")
+        } catch {
+            XCTAssertTrue(error is DecodingError, "Expected DecodingError for malformed data.")
+        }
+    }
+    
+    //MARK: Test empty data
+    
+    func testFetchRecipesEmptyData() async {
+        var apiClient = RecipeAPIClient()
+        apiClient.recipesURL = URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json")!
+        
+        do {
+            let recipes = try await apiClient.fetchRecipes()
+            XCTAssertTrue(recipes.isEmpty, "Expected empty array for empty data.")
+        } catch {
+            XCTFail("Expected to succeed with empty array, but got error: \(error)")
+        }
+    }
+    
+    
+    
+    
 
 }
