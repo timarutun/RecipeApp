@@ -40,8 +40,22 @@ struct RecipeAPIClient {
     }
 }
 
-enum RecipeError: Error {
+enum RecipeError: Error, LocalizedError {
     case badServerResponse
     case decodingError(Error)
     case emptyData
+    case malformedData
+
+    var errorDescription: String? {
+        switch self {
+        case .badServerResponse:
+            return "We couldn't connect to the server. Please check your internet connection and try again."
+        case .decodingError:
+            return "There was a problem loading the recipes. Please try again later."
+        case .emptyData:
+            return "No recipes found. Please try refreshing the list."
+        case .malformedData:
+            return "The recipe data is corrupted. Please try again later."
+        }
+    }
 }

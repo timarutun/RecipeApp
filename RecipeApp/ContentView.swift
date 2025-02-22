@@ -11,6 +11,8 @@ struct ContentView: View {
     @State private var recipes: [Recipe] = []
     @State private var searchText: String = ""
     @State private var selectedCuisine: String? = nil
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
 
     var cuisineTypes: [String] {
         let cuisines = Set(recipes.map { $0.cuisine })
@@ -53,37 +55,48 @@ struct ContentView: View {
                 .padding(.horizontal)
 
                 // Recipes list
-                List(filteredRecipes) { recipe in
-                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                        HStack(alignment: .top) {
-                            CachedAsyncImage(url: recipe.photoURLSmall)
-                                .frame(width: 90, height: 90)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(recipe.name)
-                                    .font(.headline)
-                                Text(recipe.cuisine)
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+                if filteredRecipes.isEmpty {
+                    // Empty state
+                    VStack {
+                        Spacer()
+                        Text("No recipes found")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                } else {
+                    List(filteredRecipes) { recipe in
+                        NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                            HStack(alignment: .top) {
+                                CachedAsyncImage(url: recipe.photoURLSmall)
+                                    .frame(width: 90, height: 90)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(recipe.name)
+                                        .font(.headline)
+                                    Text(recipe.cuisine)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.horizontal, 5)
                             }
-                            .padding(.horizontal, 5)
                         }
                     }
-                    
-                }
-                .task {
-                    await loadRecipes()
-                }
-                .refreshable {
-                    await loadRecipes()
                 }
             }
             .navigationTitle("Recipes")
-            
-//            .onTapGesture {
-//                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-//            }
+            .task {
+                await loadRecipes()
+            }
+            .refreshable {
+                await loadRecipes()
+            }
+            .alert("Error", isPresented: $showErrorAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage)
+            }
         }
     }
     
@@ -92,7 +105,12 @@ struct ContentView: View {
             let fetchedRecipes = try await RecipeAPIClient().fetchRecipes()
             recipes = fetchedRecipes
         } catch {
-            print("Failed to load recipes: \(error.localizedDescription)")
+            if let recipeError = error as? RecipeError {
+                errorMessage = recipeError.errorDescription ?? "An unknown error occurred."
+            } else {
+                errorMessage = "An unexpected error occurred. Please try again later."
+            }
+            showErrorAlert = true
         }
     }
 }
