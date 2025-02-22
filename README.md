@@ -5,12 +5,12 @@ Recipe App is a simple iOS application that fetches and displays recipes from a 
 
 ### Screenshots
 <div align="center">
-  <img src="Media/main.PNG" width="140" alt="Main Screen">
-  <img src="Media/detail.PNG" width="140" alt="Recipe Detail">
-  <img src="Media/searchBar.PNG" width="140" alt="Search Bar">
-  <img src="Media/filter.PNG" width="140" alt="Filter">
-  <img src="Media/refresh.PNG" width="140" alt="Refresh">
-  <img src="Media/error.PNG" width="140" alt="Error Alert">
+  <img src="Media/main.PNG" width="130" alt="Main Screen">
+  <img src="Media/detail.PNG" width="130" alt="Recipe Detail">
+  <img src="Media/searchBar.PNG" width="130" alt="Search Bar">
+  <img src="Media/filter.PNG" width="130" alt="Filter">
+  <img src="Media/refresh.PNG" width="130" alt="Refresh">
+  <img src="Media/error.PNG" width="130" alt="Error Alert">
 </div>
 
 ### Demo Video
