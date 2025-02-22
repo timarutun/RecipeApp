@@ -26,7 +26,7 @@ In this project, I prioritized the following areas to ensure a robust and user-f
    - **Why**: Loading images from the network repeatedly can be slow and consume unnecessary bandwidth. Implementing a custom image caching mechanism allowed me to minimize network usage and improve the app's performance by storing images locally after the first load.
 
 3. **Error Handling**:
-   - **Why**: Users should never be left in the dark when something goes wrong. I focused on providing clear, user-friendly error messages for common issues like network errors or malformed data, ensuring that users understand what happened and how to proceed.
+   - **Why**: Users should never be left in the dark when something goes wrong. I focused on providing clear, user-friendly error messages for common issues like malformed data, ensuring that users understand what happened and how to proceed.
 
 4. **Testing**:
    - **Why**: Reliable code is crucial for any application. I wrote unit tests for core functionality, such as data fetching and caching, to ensure that the app behaves as expected under various conditions. This also helps catch regressions early in the development process.
